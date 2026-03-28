@@ -1,182 +1,229 @@
 <% layout("layouts/boilerplate") %>
 
-<style>
-/* Shift entire content */
-.listings-wrapper {
-  margin-left: -22px;
-  margin-top: -85px;
-}
+<div class="container page-shell">
+  <!-- compact intro strip -->
+  <section class="home-intro-strip">
+    <div class="home-intro-left">
+      <span class="intro-pill">WanderLust by Suyash</span>
+      <h1>Premium stays, cleaner booking, better experience.</h1>
+      <p>
+        WanderLust is a polished Airbnb-style web platform built by Suyash,
+        focused on premium UI, secure login, wishlist flow, booking experience,
+        and modern SaaS-level product design.
+      </p>
+    </div>
 
-/* Filters */
-#filters {
-  margin-left: 10px;
-  margin-top: 3rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
+    <div class="home-intro-right">
+      <div class="intro-mini-card">
+        <h4><%= allListings.length %>+</h4>
+        <p>Active stays</p>
+      </div>
+      <div class="intro-mini-card">
+        <h4>4.8/5</h4>
+        <p>User feel</p>
+      </div>
+      <div class="intro-mini-card">
+        <h4>Secure</h4>
+        <p>Login protected</p>
+      </div>
+    </div>
+  </section>
 
-.filter {
-  font-size: 13px;
-  text-align: center;
-  opacity: 0.7;
-  width: 70px;
-}
-.filter:hover { opacity: 1; cursor: pointer; }
-.filter i { font-size: 16px; margin-bottom: 4px; }
-.filter p { margin-top: 4px; font-size: 12px; }
+  <div id="filters-wrap">
+    <div id="filters">
+      <div class="filter"><i class="fa-solid fa-fire"></i><p>Trending</p></div>
+      <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
+      <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Iconic Cities</p></div>
+      <div class="filter"><i class="fa-solid fa-mountain"></i><p>Mountains</p></div>
+      <div class="filter"><i class="fa-brands fa-fort-awesome"></i><p>Castles</p></div>
+      <div class="filter"><i class="fa-solid fa-campground"></i><p>Camping</p></div>
+      <div class="filter"><i class="fa-solid fa-cow"></i><p>Farms</p></div>
+      <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Pools</p></div>
+      <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
+      <div class="filter"><i class="fa-solid fa-igloo"></i><p>Domes</p></div>
+      <div class="filter"><i class="fa-solid fa-ship"></i><p>Boats</p></div>
+    </div>
 
-/* NEW CUSTOM TOGGLE SWITCH */
-.tax-toggle {
-  margin-left: 10rem;
-  margin-top: -0.75rem;
-  border: 1.2px solid #bfbfbf;
-  border-radius: 22px;
-  padding: 2px 10px;
-  display: inline-flex;
-  align-items: center;
-  height: 3.25rem;
-  gap: 10px;
-  background: #fff;
-  font-size: 0.78rem;
-  opacity: 0.9;
-}
-
-/* ✔ Text on left */
-.tax-toggle label {
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-/* ✔ Custom Sliding Switch */
-.switch {
-  position: relative;
-  width: 38px;
-  height: 20px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-  cursor: pointer;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .3s;
-  border-radius: 25px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: .3s;
-  border-radius: 50%;
-}
-
-/* When checked */
-.switch input:checked + .slider {
-  background-color: #ff385c;   /* Airbnb pink */
-}
-
-.switch input:checked + .slider:before {
-  transform: translateX(18px);
-}
-
-/* GST text beside price */
-.gst-tag {
-  color: #0e0e0e;
-  font-size: 0.85rem;
-  font-weight: 600;
-  float: right;
-  display: none;
-}
-</style>
-
-<body>
-
-<div class="listings-wrapper">
-
-  <!-- FILTERS -->
-  <div id="filters">
-    <div class="filter"><i class="fa-solid fa-fire"></i><p>Trending</p></div>
-    <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
-    <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Iconic Cities</p></div>
-    <div class="filter"><i class="fa-solid fa-mountain"></i><p>Mountains</p></div>
-    <div class="filter"><i class="fa-brands fa-fort-awesome"></i><p>Castles</p></div>
-    <div class="filter"><i class="fa-solid fa-campground"></i><p>Camping</p></div>
-    <div class="filter"><i class="fa-solid fa-cow"></i><p>Farms</p></div>
-    <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Amazing Pools</p></div>
-    <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
-    <div class="filter"><i class="fa-solid fa-igloo"></i><p>Domes</p></div>
-    <div class="filter"><i class="fa-solid fa-ship"></i><p>Boats</p></div>
-
-    <!-- NEW CUSTOM SLIDER SWITCH WITH TEXT BEFORE IT -->
     <div class="tax-toggle">
       <label for="taxSwitchCheck">Show prices with tax</label>
-
       <label class="switch">
         <input type="checkbox" id="taxSwitchCheck">
         <span class="slider"></span>
       </label>
     </div>
-
   </div>
-  <!-- END FILTERS -->
 
+  <div class="grid-head">
+    <div>
+      <span class="section-mini-label">Curated collection</span>
+      <h2 class="section-heading mb-1">Featured stays</h2>
 
-  <!-- LISTINGS GRID -->
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-2">
-    <% for (let listing of allListings) { %>
+      <% if (typeof searchQuery !== "undefined" && searchQuery && searchQuery.trim()) { %>
+        <p class="grid-count mb-2">Showing results for "<%= searchQuery %>"</p>
+      <% } %>
 
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-        <div class="card col listing-card">
+      <% if (typeof nearbyMode !== "undefined" && nearbyMode) { %>
+        <p class="grid-count mb-2">Sorted by nearest to your current location</p>
+      <% } %>
 
-          <img src="<%= listing.image.url %>"
-               class="card-img-top"
-               alt="listing_image"
-               style="height:20rem;" />
+      <p class="grid-count mb-0"><%= allListings.length %> listings available right now</p>
+    </div>
+  </div>
 
-          <div class="card-body">
-            <p class="card-text">
-              <b><%= listing.title %></b><br>
+  <% if (!allListings.length) { %>
+    <div class="empty-state">
+      <h4>No listings found</h4>
+      <p>Try another search or explore all listings again.</p>
+      <a href="/listings" class="btn btn-primary rounded-pill px-4">View all listings</a>
+    </div>
+  <% } else { %>
+    <div class="row row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 listing-grid">
+      <% for (let listing of allListings) { %>
+        <% const isSaved = typeof wishlistIds !== "undefined" && wishlistIds.includes(listing._id.toString()); %>
+        <% const destinationLink = currUser ? `/listings/${listing._id}` : "/login"; %>
 
-              ₹<%= listing.price.toLocaleString("en-IN") %> /night
+        <div class="col">
+          <div class="card listing-card h-100">
+            <div class="card-img-wrap">
+              <a href="<%= destinationLink %>" class="badge-link" aria-label="Guest favorite">
+                <span class="card-badge card-badge-clickable">Guest favorite</span>
+              </a>
 
-              <span class="gst-tag">+18% GST</span>
-            </p>
+              <div class="wishlist-form">
+                <% if (currUser) { %>
+                  <form action="/listings/<%= listing._id %>/wishlist" method="POST">
+                    <button class="card-fav" type="submit" aria-label="Save" data-wishlist-btn="true">
+                      <i class="<%= isSaved ? 'fa-solid' : 'fa-regular' %> fa-heart"></i>
+                    </button>
+                  </form>
+                <% } else { %>
+                  <a href="/login" class="card-fav" aria-label="Login to save">
+                    <i class="fa-regular fa-heart"></i>
+                  </a>
+                <% } %>
+              </div>
+
+              <a href="<%= destinationLink %>" class="listing-media-link">
+                <img
+                  src="<%= listing.image && listing.image.url ? listing.image.url : '' %>"
+                  class="card-img-top"
+                  alt="listing_image"
+                  style="height: 19rem;"
+                />
+                <div class="image-overlay">
+                  <span>View stay</span>
+                </div>
+              </a>
+            </div>
+
+            <div class="card-body">
+              <a href="<%= destinationLink %>" class="listing-content-link">
+                <div class="card-title-row">
+                  <h5 class="card-title"><%= listing.title %></h5>
+                  <div class="card-rating">
+                    <i class="fa-solid fa-star"></i> 4.8
+                  </div>
+                </div>
+
+                <p class="card-location">
+                  <%= listing.location %>, <%= listing.country %>
+                </p>
+
+                <div class="card-price-row">
+                  <div class="card-price">
+                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                    <span>/ night</span>
+                  </div>
+
+                  <% if (listing.distanceKm !== null && typeof listing.distanceKm !== "undefined") { %>
+                    <span class="gst-tag" style="display:inline-flex;">
+                      <%= listing.distanceKm.toFixed(1) %> km
+                    </span>
+                  <% } else { %>
+                    <span class="gst-tag">+18% GST</span>
+                  <% } %>
+                </div>
+              </a>
+            </div>
           </div>
-
         </div>
-      </a>
+      <% } %>
+    </div>
 
-    <% } %>
-  </div>
-  <!-- END LISTINGS -->
+    <!-- bottom premium SaaS section -->
+    <section class="home-value-section">
+      <div class="value-head">
+        <div>
+          <span class="value-kicker">About the platform</span>
+          <h3>Designed like a modern SaaS booking product</h3>
+          <p>
+            WanderLust is built by Suyash as a premium Airbnb-style web app with
+            clean UI, secure login, wishlist interaction, booking-ready flows,
+            modern navigation, and professional product presentation.
+          </p>
+        </div>
+      </div>
 
+      <div class="value-grid">
+        <div class="value-card value-card-primary">
+          <div class="value-icon">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <h4>Premium UI design</h4>
+          <p>
+            Soft cards, cleaner spacing, richer hover states, and a more polished
+            visual hierarchy improve the feel of the product.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <h4>Protected interactions</h4>
+          <p>
+            Wishlist and listing interactions guide guest users to login first,
+            creating a more realistic platform flow.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fa-solid fa-heart-circle-check"></i>
+          </div>
+          <h4>User-focused experience</h4>
+          <p>
+            The platform is built to make exploration, shortlisting, and booking
+            feel simple, attractive, and intuitive.
+          </p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <h4>Built by Suyash</h4>
+          <p>
+            A full-stack project created to demonstrate product thinking,
+            frontend polish, backend flow, and job-ready development skills.
+          </p>
+        </div>
+      </div>
+    </section>
+  <% } %>
 </div>
 
-
-
-<!-- JS : Toggle GST visibility -->
 <script>
-document.getElementById("taxSwitchCheck").addEventListener("change", function () {
-  document.querySelectorAll(".gst-tag").forEach(tag => {
-    tag.style.display = this.checked ? "inline" : "none";
-  });
-});
-</script>
+  const taxToggle = document.getElementById("taxSwitchCheck");
 
-</body>
+  if (taxToggle) {
+    taxToggle.addEventListener("change", function () {
+      document.querySelectorAll(".gst-tag").forEach((tag) => {
+        const isDistanceTag = tag.textContent.includes("km");
+        if (!isDistanceTag) {
+          tag.style.display = this.checked ? "inline-flex" : "none";
+        }
+      });
+    });
+  }
+</script>

@@ -1,81 +1,438 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="row mt-3">
-  <div class="col-8 offset-2">
+<style>
+  .form-page {
+    max-width: 1250px;
+    margin: 0 auto;
+  }
 
-  <h3 class="mb-4">Edit your Listing</h3>
-  <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation" enctype="multipart/form-data">
-    
-    <!-- Title -->
-    <div class="mb-3">
-      <label for="title" class="form-label">Title</label>
-      <input type="text" class="form-control" id="title" name="listing[title]" value="<%= listing.title %>" required>
-      
-         <div class="invalid-feedback">please enter a valid title</div>
+  .form-hero {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 42%, #f8fafc 100%);
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    border-radius: 30px;
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.06);
+  }
 
+  .form-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    margin-bottom: 0.45rem;
+  }
+
+  .form-hero p {
+    color: #6b7280;
+    max-width: 780px;
+    margin-bottom: 0;
+  }
+
+  .hosting-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 1.5rem;
+  }
+
+  .form-card,
+  .preview-card {
+    background: #fff;
+    border: 1px solid rgba(229, 231, 235, 0.9);
+    border-radius: 28px;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.06);
+  }
+
+  .form-card {
+    padding: 1.5rem;
+  }
+
+  .preview-card {
+    padding: 1.2rem;
+    position: sticky;
+    top: 110px;
+    height: fit-content;
+  }
+
+  .card-headline {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.3rem;
+  }
+
+  .card-sub {
+    color: #6b7280;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-block {
+    border: 1px solid #eef2f7;
+    border-radius: 22px;
+    padding: 1.15rem;
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+    margin-bottom: 1rem;
+  }
+
+  .section-block h5 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 0.9rem;
+  }
+
+  .form-label {
+    font-weight: 700;
+    margin-bottom: 0.45rem;
+  }
+
+  .form-control {
+    min-height: 54px;
+    border-radius: 16px !important;
+  }
+
+  textarea.form-control {
+    min-height: 130px;
+    resize: vertical;
+  }
+
+  .split-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .publish-btn {
+    width: 100%;
+    min-height: 56px;
+    border-radius: 18px !important;
+    font-weight: 800 !important;
+    font-size: 1rem !important;
+  }
+
+  .secondary-btn {
+    width: 100%;
+    min-height: 54px;
+    border-radius: 18px !important;
+    font-weight: 700 !important;
+  }
+
+  .preview-image {
+    width: 100%;
+    height: 320px;
+    border-radius: 24px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border: 1px solid #e5e7eb;
+  }
+
+  .current-image-box {
+    margin-bottom: 1rem;
+    padding: 0.85rem;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+  }
+
+  .current-image-box p {
+    margin-bottom: 0.7rem;
+    font-weight: 700;
+  }
+
+  .current-image-thumb {
+    width: 100%;
+    max-width: 320px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .preview-content {
+    padding: 1rem 0.2rem 0.2rem 0.2rem;
+  }
+
+  .preview-top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .preview-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .preview-rating {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .preview-location {
+    color: #6b7280;
+    margin-bottom: 0.45rem;
+  }
+
+  .preview-price {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .preview-price span {
+    color: #6b7280;
+    font-weight: 600;
+  }
+
+  .mini-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+
+  .mini-pill {
+    padding: 0.48rem 0.8rem;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 992px) {
+    .hosting-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .preview-card {
+      position: static;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .split-2 {
+      grid-template-columns: 1fr;
+    }
+
+    .form-hero h1 {
+      font-size: 1.75rem;
+    }
+  }
+</style>
+
+<div class="form-page">
+  <section class="form-hero">
+    <h1>Refine your listing experience.</h1>
+    <p>
+      Edit your stay details, improve presentation, update pricing, and make your property look more premium to future guests.
+    </p>
+  </section>
+
+  <div class="hosting-grid">
+    <div class="form-card">
+      <div class="card-headline">Edit listing</div>
+      <p class="card-sub">Update the information below and keep your listing fresh.</p>
+
+      <form
+        method="POST"
+        action="/listings/<%= listing._id %>?_method=PUT"
+        novalidate
+        class="needs-validation"
+        enctype="multipart/form-data"
+      >
+        <div class="section-block">
+          <h5>Basic details</h5>
+
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="listing[title]"
+              value="<%= listing.title %>"
+              required
+            />
+            <div class="invalid-feedback">Please enter a valid title.</div>
+          </div>
+
+          <div class="mb-0">
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              name="listing[description]"
+              required
+            ><%= listing.description %></textarea>
+            <div class="invalid-feedback">Please enter a short description.</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <h5>Media</h5>
+
+          <div class="current-image-box">
+            <p>Current image</p>
+            <img
+              src="<%= originalImageUrl %>"
+              class="current-image-thumb"
+              alt="Current listing image"
+            />
+          </div>
+
+          <div class="mb-0">
+            <label for="image" class="form-label">Upload new image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="image"
+              name="listing[image]"
+              accept="image/*"
+            />
+          </div>
+        </div>
+
+        <div class="section-block">
+          <h5>Pricing & destination</h5>
+
+          <div class="split-2">
+            <div class="mb-3">
+              <label for="price" class="form-label">Price per night</label>
+              <input
+                type="number"
+                class="form-control"
+                id="price"
+                name="listing[price]"
+                value="<%= listing.price %>"
+                required
+                min="1"
+              />
+              <div class="invalid-feedback">Price should be valid.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input
+                type="text"
+                class="form-control"
+                id="country"
+                name="listing[country]"
+                value="<%= listing.country %>"
+                required
+              />
+              <div class="invalid-feedback">Country name should be valid.</div>
+            </div>
+          </div>
+
+          <div class="mb-0">
+            <label for="location" class="form-label">Location</label>
+            <input
+              type="text"
+              class="form-control"
+              id="location"
+              name="listing[location]"
+              value="<%= listing.location %>"
+              required
+            />
+            <div class="invalid-feedback">Please enter a valid location.</div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 mt-3">
+          <button class="btn btn-primary publish-btn">Save changes</button>
+          <a href="/listings/<%= listing._id %>" class="btn btn-outline-dark secondary-btn">Back to listing</a>
+        </div>
+      </form>
     </div>
 
-    <!-- Description -->
-    <div class="mb-3">
-      <label for="description" class="form-label">Description</label>
-      <textarea class="form-control" id="description" name="listing[description]" ><%= listing.description %></textarea>
+    <aside class="preview-card">
+      <div class="card-headline">Updated preview</div>
+      <p class="card-sub">See how your listing looks after editing.</p>
 
-      <div class="invalid-feedback">please enter a short description</div>
+      <img
+        id="imagePreview"
+        class="preview-image"
+        src="<%= originalImageUrl %>"
+        alt="Preview"
+      />
 
-    </div>
+      <div class="preview-content">
+        <div class="preview-top">
+          <h4 class="preview-title" id="previewTitle"><%= listing.title %></h4>
+          <div class="preview-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+        </div>
 
-    
-    <div class="mb-3">
-  Original Listing Image <br />
-<img 
-  src="<%= originalImageUrl  %>" 
-  style="width: 250px; height: 150px; object-fit: cover; border-radius: 10px;" 
-/>
-     </div>
-    
-    
-    <!-- Image URL -->
-    <div class="mb-3">
-      <label for="image" class="form-label">Upload new Image</label>
-      <input type="file" class="form-control" id="image" name="listing[image]" >
-    
+        <div class="preview-location" id="previewLocation">
+          <%= listing.location %>, <%= listing.country %>
+        </div>
 
-    </div>
+        <div class="preview-price">
+          ₹<span id="previewPrice"><%= listing.price %></span> <span>/ night</span>
+        </div>
 
-    <div class="row">
-      <!-- Price -->
-      <div class="col-md-6 mb-3">
-        <label for="price" class="form-label">Price</label>
-        <input type="number" class="form-control" id="price" name="listing[price]" value="<%= listing.price %>" required>
-           <div class="invalid-feedback">price should be valid</div>
-
+        <div class="mini-pills">
+          <span class="mini-pill">Guest favorite</span>
+          <span class="mini-pill">Fast Wi-Fi</span>
+          <span class="mini-pill">Top rated</span>
+        </div>
       </div>
-
-      <!-- Country -->
-      <div class="col-md-6 mb-3">
-        <label for="country" class="form-label">Country</label>
-        <input type="text" class="form-control" id="country" name="listing[country]" value="<%= listing.country %>" required>
-      
-          <div class="invalid-feedback">country name should be valid</div>
-
-      </div>
-    </div>
-
-    <!-- Location -->
-    <div class="mb-3">
-      <label for="location" class="form-label">Location</label>
-      <input type="text" class="form-control" id="location" name="listing[location]" value="<%= listing.location %>" required>
-   
-       <div class="invalid-feedback">please enter a valid location</div>
-
-    </div>
-
-    <!-- Submit -->
-    <button  class="btn btn-dark add-btn">edit</button>
-  </form>
-
-
+    </aside>
   </div>
 </div>
 
-<script src="/js/script.js"></script>
+<script>
+  (() => {
+    "use strict";
+
+    const form = document.querySelector(".needs-validation");
+    if (form) {
+      form.addEventListener("submit", (event) => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add("was-validated");
+      });
+    }
+
+    const titleInput = document.getElementById("title");
+    const locationInput = document.getElementById("location");
+    const countryInput = document.getElementById("country");
+    const priceInput = document.getElementById("price");
+    const imageInput = document.getElementById("image");
+
+    const previewTitle = document.getElementById("previewTitle");
+    const previewLocation = document.getElementById("previewLocation");
+    const previewPrice = document.getElementById("previewPrice");
+    const imagePreview = document.getElementById("imagePreview");
+
+    const updatePreview = () => {
+      previewTitle.textContent = titleInput.value.trim() || "Your listing title";
+      const loc = locationInput.value.trim();
+      const country = countryInput.value.trim();
+      previewLocation.textContent =
+        [loc, country].filter(Boolean).join(", ") || "Location, Country";
+      previewPrice.textContent = priceInput.value.trim() || "0";
+    };
+
+    [titleInput, locationInput, countryInput, priceInput].forEach((input) => {
+      if (input) input.addEventListener("input", updatePreview);
+    });
+
+    if (imageInput) {
+      imageInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          imagePreview.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    updatePreview();
+  })();
+</script>

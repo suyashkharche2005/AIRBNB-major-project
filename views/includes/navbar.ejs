@@ -1,58 +1,103 @@
-<style>
-.search-btn {
-background-color:#fe424d;
-color: #fff;
-padding:0 1rem 0 1rem;
-border-radius: 25px;
-}
+<nav class="navbar navbar-expand-lg fixed-top premium-navbar">
+  <div class="container-fluid px-3 px-lg-4">
+    <a class="navbar-brand" href="/listings">
+      <div class="brand-mark">
+        <i class="fa-regular fa-compass"></i>
+      </div>
+      <span class="brand-text">WanderLust</span>
+    </a>
 
-.search-btn:hover {
-background-color:#fe424d;
-color: #fff;
-}
-
-.search-btn i{
-  display: inline;
-  margin-right: 0.5rem;
-}
-
-.search-inp{
-  border-radius: 25px;
-padding: 0.5rem 3rem 0.5rem 3rem;
-font-size: 0.85rem;
-}
-
-</style>
-
-
-<nav class="navbar navbar-expand-md bg-body-light  border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" >
+    <button
+      class="navbar-toggler custom-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-         <form class="d-flex" role="search">
-      <input class="form-control me-2 search-inp" type="search" placeholder="Search destinations" />
-      <button class=" btn search-btn" type="submit"> <i class="fa-solid fa-magnifying-glass"></i>Search</button>
-    </form>
-      </div>
-       <div class="navbar-nav ms-auto">
-       <a class="nav-link" href="/listings/new">Airbnb your home</a>
 
-        <% if(!currUser) { %>
-        <a class="nav-link "  href="/signup"><b>Sign up</b></a>
-        <a class="nav-link" href="/login"><b>Log in</b></a>
-        <% } %>  <% if(currUser) {  %>
-        <a class="nav-link" href="/logout"><b>Log out</b></a>
+    <div class="collapse navbar-collapse nav-shell" id="navbarNavAltMarkup">
+      <div class="navbar-nav nav-left-links">
+        <a class="nav-link nav-pill" href="/listings">Explore</a>
+      </div>
 
+      <div class="search-form-shell">
+        <form class="search-form" role="search" method="GET" action="/listings">
+          <input
+            class="form-control search-inp"
+            name="search"
+            type="search"
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            placeholder="Search destinations, stays, escapes..."
+            aria-label="Search"
+          />
+          <button class="btn search-btn" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+          </button>
+          <button class="btn geo-btn" type="button" id="findNearbyBtn">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            <span>Nearby</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="navbar-nav ms-lg-auto nav-actions">
+        <a class="nav-link nav-pill nav-cta" href="/listings/new">Airbnb your home</a>
+
+        <% if (!currUser) { %>
+          <a class="nav-link nav-pill nav-auth-link" href="/signup"><b>Sign up</b></a>
+          <a class="nav-link nav-pill nav-auth-link" href="/login"><b>Log in</b></a>
+        <% } else { %>
+          <a class="nav-link nav-pill nav-icon-link" href="/wishlist">
+            <i class="fa-regular fa-heart me-1"></i> Wishlist
+          </a>
+
+          <a class="nav-link nav-pill nav-icon-link" href="/dashboard">
+            <i class="fa-solid fa-chart-line me-1"></i> Dashboard
+          </a>
+
+          <div class="user-menu">
+            <div class="user-avatar">
+              <%= (currUser.username || "U").charAt(0).toUpperCase() %>
+            </div>
+            <a class="nav-link nav-pill p-0 px-1 m-0 fw-bold" href="/logout">Log out</a>
+          </div>
         <% } %>
       </div>
-
     </div>
   </div>
 </nav>
+
+<script>
+  const nearbyBtn = document.getElementById("findNearbyBtn");
+
+  if (nearbyBtn) {
+    nearbyBtn.addEventListener("click", () => {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported in your browser.");
+        return;
+      }
+
+      nearbyBtn.disabled = true;
+      nearbyBtn.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i><span>Locating...</span>';
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          window.location.href = `/listings?lat=${latitude}&lng=${longitude}`;
+        },
+        () => {
+          nearbyBtn.disabled = false;
+          nearbyBtn.innerHTML =
+            '<i class="fa-solid fa-location-crosshairs"></i><span>Nearby</span>';
+          alert("Could not fetch your location.");
+        }
+      );
+    });
+  }
+</script>

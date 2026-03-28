@@ -1,28 +1,106 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="container mt-5" style="max-width: 500px;">
-    <h2 class="text-center mb-4">Create an Account</h2>
+<div class="container auth-page-wrap">
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <div>
+        <span class="auth-kicker">Join WanderLust</span>
+        <h2>Create your account and explore a more premium booking platform.</h2>
+        <p>
+          Sign up to unlock wishlist features, protected listing interactions,
+          better booking flow, and a polished SaaS-style product experience built by Suyash.
+        </p>
 
-    <form action="/signup" method="POST">
-        <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" required>
+        <div class="auth-feature-list">
+          <div class="auth-feature">
+            <i class="fa-solid fa-bolt"></i>
+            <div>
+              <strong>Faster user flow</strong>
+              <p class="mb-0">Move from browsing to interaction more smoothly.</p>
+            </div>
+          </div>
+
+          <div class="auth-feature">
+            <i class="fa-solid fa-house"></i>
+            <div>
+              <strong>Host with confidence</strong>
+              <p class="mb-0">Add and manage listings in a professional interface.</p>
+            </div>
+          </div>
+
+          <div class="auth-feature">
+            <i class="fa-solid fa-code"></i>
+            <div>
+              <strong>Modern product design</strong>
+              <p class="mb-0">Enjoy a cleaner and stronger full-stack web app experience.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <div class="auth-card-head">
+          <h3>Sign up</h3>
+          <p>Create your account to get started.</p>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" required>
+        <form action="/signup" method="POST" class="auth-form needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              name="email"
+              id="email"
+              type="email"
+              class="form-control"
+              placeholder="Enter your email"
+              required
+            />
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              name="username"
+              id="username"
+              type="text"
+              class="form-control"
+              placeholder="Choose a username"
+              required
+            />
+            <div class="invalid-feedback">Please enter username.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              name="password"
+              id="password"
+              type="password"
+              class="form-control"
+              placeholder="Create your password"
+              required
+            />
+            <div class="invalid-feedback">Please enter password.</div>
+          </div>
+
+          <button class="btn btn-primary w-100 py-3 fw-bold mt-2" type="submit">
+            Create account
+          </button>
+        </form>
+
+        <div class="auth-switch">
+          Already have an account?
+          <a href="/login">Log in</a>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" required>
-        </div>
-
-        <button class="btn btn-primary w-100">Sign Up</button>
-    </form>
-
-    <p class="mt-3 text-center">
-        Already have an account? <a href="/login">Login</a>
-    </p>
+        <p class="auth-note">
+          WanderLust is a premium Airbnb-style platform project by Suyash,
+          built to showcase polished UI and job-ready development quality.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,200 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container page-shell dashboard-page">
+  <div class="dashboard-head">
+    <div>
+      <h1 class="section-heading mb-1">Owner dashboard</h1>
+      <p class="section-subtext mb-0">
+        Track your listings, bookings, reviews, wishlist saves, and performance.
+      </p>
+    </div>
+    <div class="dashboard-actions">
+      <a href="/listings/new" class="btn btn-primary rounded-pill px-4">Add listing</a>
+      <a href="/wishlist" class="btn btn-outline-dark rounded-pill px-4">View wishlist</a>
+    </div>
+  </div>
+
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="label">Total listings</div>
+      <div class="value"><%= typeof totalListings !== "undefined" ? totalListings : 0 %></div>
+    </div>
+
+    <div class="dash-card">
+      <div class="label">Wishlist saves</div>
+      <div class="value"><%= typeof totalWishlist !== "undefined" ? totalWishlist : 0 %></div>
+    </div>
+
+    <div class="dash-card">
+      <div class="label">Reviews received</div>
+      <div class="value"><%= typeof totalReviews !== "undefined" ? totalReviews : 0 %></div>
+    </div>
+
+    <div class="dash-card">
+      <div class="label">Average rating</div>
+      <div class="value"><%= typeof averageRating !== "undefined" ? averageRating : "0.0" %></div>
+    </div>
+
+    <div class="dash-card">
+      <div class="label">Total bookings</div>
+      <div class="value"><%= typeof totalBookings !== "undefined" ? totalBookings : 0 %></div>
+    </div>
+
+    <div class="dash-card">
+      <div class="label">Booking revenue</div>
+      <div class="value">₹ <%= Number(typeof totalBookingRevenue !== "undefined" ? totalBookingRevenue : 0).toLocaleString("en-IN") %></div>
+    </div>
+  </div>
+
+  <div class="dashboard-section info-box mb-4">
+    <div class="section-top">
+      <h3 class="mb-0 fw-bold">My listings</h3>
+      <span class="pill-muted"><%= typeof totalListings !== "undefined" ? totalListings : 0 %> total</span>
+    </div>
+
+    <% if (!myListings || !myListings.length) { %>
+      <div class="empty-state-sm">
+        <h5 class="fw-bold mb-2">No listings yet</h5>
+        <p class="text-muted mb-3">Create your first premium stay and start hosting.</p>
+        <a href="/listings/new" class="btn btn-primary rounded-pill px-4">Create listing</a>
+      </div>
+    <% } else { %>
+      <div class="row row-cols-xl-3 row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+        <% myListings.forEach((listing) => { %>
+          <div class="col">
+            <div class="card listing-card h-100">
+              <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card-img-wrap">
+                  <img
+                    src="<%= listing.image && listing.image.url ? listing.image.url : '' %>"
+                    class="card-img-top"
+                    alt="listing_image"
+                    style="height: 18rem;"
+                  />
+                </div>
+
+                <div class="card-body">
+                  <div class="card-title-row">
+                    <h5 class="card-title"><%= listing.title %></h5>
+
+                    <div class="card-rating">
+                      <i class="fa-solid fa-star"></i>
+                      <%
+                        let avg = 0;
+                        if (listing.reviews && listing.reviews.length) {
+                          let sum = 0;
+                          listing.reviews.forEach((r) => {
+                            sum += r.rating || 0;
+                          });
+                          avg = (sum / listing.reviews.length).toFixed(1);
+                        }
+                      %>
+                      <%= avg || "0.0" %>
+                    </div>
+                  </div>
+
+                  <p class="card-location"><%= listing.location %>, <%= listing.country %></p>
+
+                  <div class="card-price-row">
+                    <div class="card-price">
+                      ₹<%= listing.price.toLocaleString("en-IN") %>
+                      <span>/ night</span>
+                    </div>
+
+                    <span class="mini-info-badge">
+                      <%= listing.reviews ? listing.reviews.length : 0 %> reviews
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <div class="px-3 pb-3 d-flex gap-2">
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary flex-fill">Edit</a>
+
+                <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="flex-fill">
+                  <button class="btn btn-outline-danger w-100 rounded-pill" type="submit">
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="dashboard-section info-box">
+    <div class="section-top">
+      <h3 class="mb-0 fw-bold">My bookings</h3>
+      <span class="pill-muted"><%= typeof totalBookings !== "undefined" ? totalBookings : 0 %> total</span>
+    </div>
+
+    <% if (!bookings || !bookings.length) { %>
+      <div class="empty-state-sm">
+        <h5 class="fw-bold mb-2">No bookings yet</h5>
+        <p class="text-muted mb-3">Explore stays and make your first booking.</p>
+        <a href="/listings" class="btn btn-primary rounded-pill px-4">Explore stays</a>
+      </div>
+    <% } else { %>
+      <div class="booking-list">
+        <% bookings.forEach((booking) => { %>
+          <div class="booking-item">
+            <div class="booking-thumb">
+              <img
+                src="<%= booking.listing && booking.listing.image ? booking.listing.image.url : '' %>"
+                alt="booking_image"
+              />
+            </div>
+
+            <div class="booking-main">
+              <div class="booking-title-row">
+                <h5 class="booking-title mb-1">
+                  <%= booking.listing ? booking.listing.title : "Listing" %>
+                </h5>
+                <div class="booking-price">
+                  ₹ <%= Number(booking.totalPrice || 0).toLocaleString("en-IN") %>
+                </div>
+              </div>
+
+              <div class="booking-meta">
+                <span>
+                  <i class="fa-regular fa-calendar me-1"></i>
+                  <%= new Date(booking.checkIn).toDateString() %> →
+                  <%= new Date(booking.checkOut).toDateString() %>
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-moon me-1"></i>
+                  <%= booking.nights || 0 %> nights
+                </span>
+
+                <span>
+                  <i class="fa-solid fa-user-group me-1"></i>
+                  <%= booking.guests || 0 %> guests
+                </span>
+
+                <span class="status-pill <%= booking.status === 'confirmed' ? 'confirmed' : 'cancelled' %>">
+                  <%= booking.status || "confirmed" %>
+                </span>
+              </div>
+
+              <div class="booking-breakdown">
+                <span>Stay: ₹ <%= Number((booking.listingPricePerNight || 0) * (booking.nights || 0)).toLocaleString("en-IN") %></span>
+                <span>Cleaning: ₹ <%= Number(booking.cleaningFee || 0).toLocaleString("en-IN") %></span>
+                <span>Service: ₹ <%= Number(booking.serviceFee || 0).toLocaleString("en-IN") %></span>
+                <span>Taxes: ₹ <%= Number(booking.taxes || 0).toLocaleString("en-IN") %></span>
+              </div>
+
+              <% if (booking.listing) { %>
+                <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-dark rounded-pill mt-3 px-4">
+                  View listing
+                </a>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
